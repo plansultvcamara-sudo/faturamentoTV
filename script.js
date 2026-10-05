@@ -15,9 +15,7 @@ const views = {
   faturamento: {
     title: 'Faturamento',
     icon: 'receipt',
-    // Em construção. Para reativar, troque o content abaixo pelo iframe e inclua 'faturamento' de volta no billing-active do renderView:
-    // content: `<section class="billing-frame" aria-label="Faturamento"><div class="billing-loading" role="status"><span class="loading-spinner" aria-hidden="true"></span><span>Carregando faturamento...</span></div><iframe src="https://script.google.com/macros/s/AKfycbzxCiRrduUy3it9ETAn1wggZkHVwwMaPI-Mm544kd54VabWCfctPIjPNLZlX4JObhN0TA/exec" title="Faturamento" loading="lazy"></iframe></section>`
-    content: `<div class="panel empty-view"><div class="empty-view-inner"><div class="large-icon"><i data-lucide="construction"></i></div><p class="eyebrow">Faturamento</p><h2>Em Construção</h2><p>Esta área está sendo preparada e estará disponível em breve.</p><button class="primary-button" data-view="inicio"><i data-lucide="arrow-left"></i><span>Voltar para Início</span></button></div></div>`
+    content: `<section class="billing-frame" aria-label="Faturamento"><div class="billing-loading" role="status"><span class="loading-spinner" aria-hidden="true"></span><span>Carregando faturamento...</span></div><iframe src="https://script.google.com/macros/s/AKfycbw8laAZtg_9plDVtIvMRhhM-y2h398Ji6C5ZnMgHxmhgbVTU5wNv0Qn5dbLLotjF-JRmQ/exec" title="Faturamento" loading="lazy"></iframe></section>`
   },
   'auxilio-creche': {
     title: 'Auxílio Creche',
@@ -55,7 +53,7 @@ function closeSearch() {
 
 function renderView(viewName) {
   const view = views[viewName];
-  frame.classList.toggle('billing-active', viewName === 'auxilio-creche');
+  frame.classList.toggle('billing-active', viewName === 'faturamento' || viewName === 'auxilio-creche');
   if (view.content) {
     frame.innerHTML = view.content;
   } else {
@@ -215,7 +213,7 @@ function setupNightAnalysis() {
 
 const monthNames = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
 // Cole aqui o link /exec do Apps Script ligado à planilha de anotações.
-const NOTES_API_URL = 'https://script.google.com/macros/s/AKfycbxku_dQaDgVFqms7G-Q-Gw36B5ZnfjFHsIg504WnRq9mMM2ZrOOCjjD4fqgEf8a0Nw1/exec';
+const NOTES_API_URL = 'https://script.google.com/macros/s/AKfycbxrInQZEVlwuhnDtc6ofIJ76cI4rzmylWuyD_HkDqB2I0RKDdVcLGY2JEdn3-SmiGgObA/exec';
 let calendarDate = new Date();
 let selectedDate = null;
 let notesByDate = {};
