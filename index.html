@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#5f7171">
+  <title>SuperControl</title>
+  <link rel="icon" type="image/svg+xml" href="logo-supercontrol.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://unpkg.com/lucide@latest" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" defer></script>
+  <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <div class="app-shell sidebar-collapsed">
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark"><img src="logo-supercontrol.svg" alt="SuperControl"></div>
+        <div>
+          <strong>SuperControl</strong>
+        </div>
+        <button class="icon-button sidebar-close" id="closeSidebar" aria-label="Fechar menu"><i data-lucide="x"></i></button>
+      </div>
+
+      <nav class="main-nav" aria-label="Navegação principal">
+        <p class="nav-label">Benefícios</p>
+        <button class="nav-item active" data-view="inicio" data-tooltip="Início"><i data-lucide="calendar-days"></i><span>Início</span></button>
+        <!-- <button class="nav-item" data-view="atestado" data-tooltip="Atestado"><i data-lucide="file-check-2"></i><span>Atestado</span></button> -->
+        <button class="nav-item" data-view="adicional-noturno" data-tooltip="Adicional Noturno"><i data-lucide="moon-star"></i><span>Adicional Noturno</span></button>
+        <button class="nav-item" data-view="faturamento" data-tooltip="Faturamento"><i data-lucide="receipt"></i><span>Faturamento</span></button>
+        <button class="nav-item" data-view="auxilio-creche" data-tooltip="Auxílio Creche"><i data-lucide="baby"></i><span>Auxílio Creche</span></button>
+        <!-- <button class="nav-item" data-view="inss" data-tooltip="INSS"><i data-lucide="landmark"></i><span>INSS</span></button> -->
+        <!-- <button class="nav-item" data-view="ferias" data-tooltip="Férias"><i data-lucide="calendar-range"></i><span>Férias</span></button> -->
+      </nav>
+
+      <div class="sidebar-footer">
+      </div>
+    </aside>
+
+    <main class="main-area">
+      <header class="topbar">
+        <button class="icon-button menu-toggle" id="openSidebar" aria-label="Abrir menu"><i data-lucide="menu"></i></button>
+        <div class="topbar-brand"><img src="logo-supercontrol.svg" alt="SuperControl"><strong>SuperControl</strong></div>
+        <div class="topbar-actions"><div class="search-box" id="searchBox"><i data-lucide="search"></i><input id="searchInput" type="search" placeholder="Buscar qualquer coisa..." autocomplete="off" aria-label="Buscar item do menu"><kbd>⌘ K</kbd><div class="search-results" id="searchResults" role="listbox"></div></div></div>
+      </header>
+
+      <section class="content-frame" id="contentFrame" aria-live="polite"></section>
+    </main>
+  </div>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <div class="toast" id="toast" role="status"><i data-lucide="check-circle-2"></i><span>Projeto criado com sucesso.</span></div>
+</body>
+</html>
