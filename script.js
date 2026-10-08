@@ -22,6 +22,11 @@ const views = {
     icon: 'baby',
     content: `<section class="billing-frame" aria-label="Auxílio Creche"><div class="billing-loading" role="status"><span class="loading-spinner" aria-hidden="true"></span><span>Carregando auxílio creche...</span></div><iframe src="https://script.google.com/macros/s/AKfycbx8PgHynhLi3QetjixYyYS_vpbKv5Csry1SwiSZbZThlFj2qrI0tOuQasGBaYnVRT9T/exec" title="Auxílio Creche" loading="lazy"></iframe></section>`
   },
+  'atestados-medicos': {
+    title: 'Atestados Médicos',
+    icon: 'file-check-2',
+    content: `<section class="billing-frame" aria-label="Atestados Médicos"><div class="billing-loading" role="status"><span class="loading-spinner" aria-hidden="true"></span><span>Carregando atestados médicos...</span></div><iframe src="https://script.google.com/macros/s/AKfycbxpP9nQMTpJ8BFVeaKJNEeXgfgeJzmPq0ofHgANZeBYmz2zAfba6xUP-0vXh1yc7TST/exec" title="Atestados Médicos" loading="lazy"></iframe></section>`
+  },
   inss: { title: 'INSS', icon: 'landmark', description: 'Acesse os detalhes das suas contribuições e descontos de INSS.' },
   ferias: { title: 'Férias', icon: 'calendar-range', description: 'Consulte seu período aquisitivo, saldo e programação de férias.' }
 };
@@ -53,7 +58,7 @@ function closeSearch() {
 
 function renderView(viewName) {
   const view = views[viewName];
-  frame.classList.toggle('billing-active', viewName === 'faturamento' || viewName === 'auxilio-creche');
+  frame.classList.toggle('billing-active', ['faturamento', 'auxilio-creche', 'atestados-medicos'].includes(viewName));
   if (view.content) {
     frame.innerHTML = view.content;
   } else {
@@ -258,19 +263,48 @@ function formatDateLabel(dateKey) {
   return `${String(day).padStart(2, '0')} de ${monthNames[month - 1]} de ${year}`;
 }
 
+function escapeHtml(text) {
+  return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function formatDayLabel(dateKey) {
+  return `Dia ${dateKey.split('-')[2]}`;
+}
+
+function formatNoteTime(createdAt) {
+  const created = new Date(createdAt);
+  if (isNaN(created)) return '';
+  return created.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+}
+
+function getMonthNotes() {
+  const prefix = `${calendarDate.getFullYear()}-${String(calendarDate.getMonth() + 1).padStart(2, '0')}-`;
+  return Object.keys(notesByDate)
+    .filter(key => key.startsWith(prefix))
+    .sort()
+    .flatMap(key => notesByDate[key].slice().sort((a, b) => String(a.createdAt).localeCompare(String(b.createdAt))));
+}
+
 function renderNotesPanel() {
   const title = document.querySelector('#notesTitle');
   const hint = document.querySelector('#notesHint');
   const list = document.querySelector('#notesList');
   const form = document.querySelector('#notesForm');
   if (!title || !list || !form) return;
-  document.querySelector('.calendar-view')?.classList.toggle('has-selection', Boolean(selectedDate));
+  const monthNotes = getMonthNotes();
+  document.querySelector('.calendar-view')?.classList.toggle('has-selection', Boolean(selectedDate) || monthNotes.length > 0);
   if (!selectedDate) {
-    title.textContent = 'Selecione um dia';
-    hint.textContent = 'Clique em um dia do calendário para ver ou lançar anotações.';
-    hint.hidden = false;
-    list.innerHTML = '';
     form.hidden = true;
+    if (monthNotes.length) {
+      title.textContent = `Anotações de ${monthNames[calendarDate.getMonth()]}`;
+      hint.hidden = true;
+      list.innerHTML = monthNotes.map(note => `<div class="note-item note-summary" data-date="${note.date}"><div class="note-meta"><strong>${formatDayLabel(note.date)}</strong></div><p>${escapeHtml(note.text)}</p></div>`).join('');
+    } else {
+      title.textContent = 'Selecione um dia';
+      hint.textContent = 'Clique em um dia do calendário para ver ou lançar anotações.';
+      hint.hidden = false;
+      list.innerHTML = '';
+    }
     return;
   }
   title.textContent = formatDateLabel(selectedDate);
@@ -291,7 +325,7 @@ function renderNotesPanel() {
   const notes = (notesByDate[selectedDate] || []).slice().sort((a, b) => String(a.createdAt).localeCompare(String(b.createdAt)));
   hint.hidden = notes.length > 0;
   hint.textContent = 'Nenhuma anotação para este dia ainda.';
-  list.innerHTML = notes.map(note => `<div class="note-item"><p>${note.text.replace(/</g, '&lt;')}</p><button type="button" class="note-delete" data-id="${note.id}" aria-label="Excluir anotação"><i data-lucide="trash-2"></i></button></div>`).join('');
+  list.innerHTML = notes.map(note => `<div class="note-item"><div class="note-meta"><strong>${formatDayLabel(note.date)}</strong></div><p>${escapeHtml(note.text)}</p><button type="button" class="note-delete" data-id="${note.id}" aria-label="Excluir anotação"><i data-lucide="trash-2"></i></button></div>`).join('');
   window.lucide?.createIcons();
 }
 
@@ -368,15 +402,21 @@ function setupCalendar() {
 
   document.querySelector('#calendarPrev').addEventListener('click', () => {
     calendarDate = new Date(calendarDate.getFullYear(), calendarDate.getMonth() - 1, 1);
+    selectedDate = null;
     renderCalendar(calendarDate);
+    renderNotesPanel();
   });
   document.querySelector('#calendarNext').addEventListener('click', () => {
     calendarDate = new Date(calendarDate.getFullYear(), calendarDate.getMonth() + 1, 1);
+    selectedDate = null;
     renderCalendar(calendarDate);
+    renderNotesPanel();
   });
   document.querySelector('#calendarToday').addEventListener('click', () => {
     calendarDate = new Date();
+    selectedDate = null;
     renderCalendar(calendarDate);
+    renderNotesPanel();
   });
   grid.addEventListener('click', event => {
     const dayButton = event.target.closest('.calendar-day');
@@ -394,6 +434,13 @@ function setupCalendar() {
     input.value = '';
   });
   document.querySelector('#notesList').addEventListener('click', event => {
+    const summary = event.target.closest('.note-summary');
+    if (summary) {
+      selectedDate = summary.dataset.date;
+      renderCalendar(calendarDate);
+      renderNotesPanel();
+      return;
+    }
     const deleteButton = event.target.closest('.note-delete');
     if (!deleteButton || !selectedDate) return;
     deleteNote(deleteButton.dataset.id, selectedDate);
