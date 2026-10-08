@@ -71,6 +71,10 @@ button { font: inherit; cursor: pointer; }
 .notes-hint { color: var(--muted); font-size: 15px; line-height: 1.5; margin: 0 0 14px; }
 .notes-list { display: grid; gap: 8px; margin-bottom: 14px; max-height: 360px; overflow-y: auto; }
 .note-item { display: flex; align-items: flex-start; gap: 8px; background: #f7faf9; border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; }
+.note-meta { display: flex; flex-direction: column; gap: 2px; min-width: 52px; font-size: 13.5px; color: var(--muted); }
+.note-meta strong { color: var(--navy); font-size: 14.5px; }
+.note-summary { cursor: pointer; }
+.note-summary:hover { border-color: var(--teal); }
 .note-item p { margin: 0; flex: 1; min-width: 0; color: var(--ink); font-size: 15px; line-height: 1.5; white-space: pre-wrap; overflow-wrap: anywhere; }
 .note-delete { border: 0; background: transparent; color: #a8b7b4; padding: 2px; border-radius: 4px; flex: 0 0 auto; }
 .note-delete:hover { color: var(--coral); }
