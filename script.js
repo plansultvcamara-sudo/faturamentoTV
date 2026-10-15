@@ -27,7 +27,11 @@ const views = {
     icon: 'file-check-2',
     content: `<section class="billing-frame" aria-label="Atestados Médicos"><div class="billing-loading" role="status"><span class="loading-spinner" aria-hidden="true"></span><span>Carregando atestados médicos...</span></div><iframe src="https://script.google.com/macros/s/AKfycbxpP9nQMTpJ8BFVeaKJNEeXgfgeJzmPq0ofHgANZeBYmz2zAfba6xUP-0vXh1yc7TST/exec" title="Atestados Médicos" loading="lazy"></iframe></section>`
   },
-  inss: { title: 'INSS', icon: 'landmark', description: 'Acesse os detalhes das suas contribuições e descontos de INSS.' },
+  inss: {
+    title: 'INSS',
+    icon: 'landmark',
+    content: `<section class="billing-frame" aria-label="INSS"><div class="billing-loading" role="status"><span class="loading-spinner" aria-hidden="true"></span><span>Carregando INSS...</span></div><iframe src="https://script.google.com/macros/s/AKfycbw-pjrNGFfvNXss9rpzhXg5hkNVAg50mVgEXKu35HYpS1NI2YpYBLv_eyuoQfSILbDE_Q/exec" title="INSS" loading="lazy"></iframe></section>`
+  },
   ferias: { title: 'Férias', icon: 'calendar-range', description: 'Consulte seu período aquisitivo, saldo e programação de férias.' }
 };
 
@@ -58,7 +62,7 @@ function closeSearch() {
 
 function renderView(viewName) {
   const view = views[viewName];
-  frame.classList.toggle('billing-active', ['faturamento', 'auxilio-creche', 'atestados-medicos'].includes(viewName));
+  frame.classList.toggle('billing-active', ['faturamento', 'auxilio-creche', 'atestados-medicos', 'inss'].includes(viewName));
   if (view.content) {
     frame.innerHTML = view.content;
   } else {
