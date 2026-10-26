@@ -32,6 +32,11 @@ const views = {
     icon: 'landmark',
     content: `<section class="billing-frame" aria-label="INSS"><div class="billing-loading" role="status"><span class="loading-spinner" aria-hidden="true"></span><span>Carregando INSS...</span></div><iframe src="https://script.google.com/macros/s/AKfycbw-pjrNGFfvNXss9rpzhXg5hkNVAg50mVgEXKu35HYpS1NI2YpYBLv_eyuoQfSILbDE_Q/exec" title="INSS" loading="lazy"></iframe></section>`
   },
+  'hora-extra': {
+    title: 'Hora Extra',
+    icon: 'clock-3',
+    content: `<section class="billing-frame" aria-label="Hora Extra"><div class="billing-loading" role="status"><span class="loading-spinner" aria-hidden="true"></span><span>Carregando hora extra...</span></div><iframe src="https://script.google.com/macros/s/AKfycbwr1OZ1vp2cHMag5raQMYccRWTVQACkjdKmolKvzxwhpRr6peDp1XXjXNabNxmO6n-keQ/exec" title="Hora Extra" loading="lazy"></iframe></section>`
+  },
   ferias: { title: 'Férias', icon: 'calendar-range', description: 'Consulte seu período aquisitivo, saldo e programação de férias.' }
 };
 
@@ -62,7 +67,7 @@ function closeSearch() {
 
 function renderView(viewName) {
   const view = views[viewName];
-  frame.classList.toggle('billing-active', ['faturamento', 'auxilio-creche', 'atestados-medicos', 'inss'].includes(viewName));
+  frame.classList.toggle('billing-active', ['faturamento', 'auxilio-creche', 'atestados-medicos', 'inss', 'hora-extra'].includes(viewName));
   if (view.content) {
     frame.innerHTML = view.content;
   } else {
